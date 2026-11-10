@@ -65,6 +65,9 @@ tr.cut td{border-bottom:4px solid var(--grid)}
 .match .p.w{font-weight:700}
 .score{font-weight:700;background:var(--hi);border:1px solid var(--grid);padding:2px 10px;min-width:58px;text-align:center}
 .mdate{font-size:.78rem;color:#666;white-space:nowrap}
+.prov{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:#ffe2b8;color:#8a4b00;border:1px dashed #b86a00;border-radius:3px;padding:1px 6px;white-space:nowrap}
+.score.provsc{border-style:dashed;background:#ffe9c7}
+.provnote{font-size:.8rem;color:var(--cream);opacity:.9}
 .empty{padding:22px 14px;color:#555;text-align:center;background:var(--sheet)}
 .pbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;border-bottom:1px dotted #777;line-height:1.2}
 .pbtn::after{content:"\25B8";font-size:.7em;color:#777;transition:transform .15s}
@@ -116,7 +119,7 @@ tr.detail>td{padding:0!important;text-align:left;white-space:normal;background:#
           <tbody id="standings"></tbody>
         </table>
       </div></div>
-      <div class="key"><span><i></i>Playoff places (top 8)</span><span class="qk"><b>Q</b>Mathematically qualified</span><span>Ties split by points difference, then games won</span><span class="tap-hint">Tap a name to see their results</span></div>
+      <div class="key"><span><i></i>Playoff places (top 8)</span><span class="qk"><b>Q</b>Mathematically qualified</span><span>Ties split by points difference, then games won</span><span class="tap-hint">Tap a name to see their results</span><span class="provnote" id="provnote" hidden></span></div>
     </section>
 
     <section aria-labelledby="rs-h">
@@ -135,7 +138,7 @@ const PLAYERS = ["big prabh","Dan","Jaan","Living in a cardboard box (Jörg)","C
 /* each result: {a, b, ga, gb, date}  ga = games won by a, gb = games won by b */
 /* players who are mathematically certain of a top-8 finish */
 const QUALIFIED = ["big prabh"];
-/* each result: see below */
+/* each result: {a, b, ga, gb, date}; provisional:true = awarded pending completion, counts as it stands */
 const RESULTS = [
   {a:"big prabh", b:"One Above All (Gilnash)", ga:2, gb:0, date:"2026-11-04"},
   {a:"Californication", b:"One Above All (Gilnash)", ga:2, gb:1, date:"2026-11-04"},
@@ -249,6 +252,7 @@ const RESULTS = [
   {a:"seim", b:"sinanamk", ga:2, gb:1, date:"2026-11-10"},
   {a:"seim", b:"Living in a cardboard box (Jörg)", ga:2, gb:1, date:"2026-11-10"},
   {a:"Best Yathzee player (hohoho)", b:"Dan", ga:2, gb:1, date:"2026-11-10"},
+  {a:"Dan", b:"Living in a cardboard box (Jörg)", ga:1, gb:0, date:"2026-11-10", provisional:true},
 ];
 /* ============================================================== */
 
@@ -308,7 +312,7 @@ function togglePlayer(btn,name){
       const c=document.createElement("span"); c.className="res "+w; c.textContent=w;
       const sc=document.createElement("span"); sc.className="sc"; sc.textContent=`${gf}–${ga}`;
       const op=document.createElement("span"); op.className="op"; op.textContent="vs "+opp;
-      const dt=document.createElement("span"); dt.className="dt"; dt.textContent=r.date?fmtDate(r.date):"";
+      const dt=document.createElement("span"); dt.className="dt"; if(r.provisional){ dt.innerHTML='<span class="prov">Provisional</span>'; } else dt.textContent=r.date?fmtDate(r.date):"";
       li.append(c,sc,op,dt); ul.append(li);
     });
     panel.append(ul);
@@ -321,6 +325,9 @@ function togglePlayer(btn,name){
   const sc=tr.closest(".scroll"); if(sc) panel.style.maxWidth=(sc.clientWidth-4)+"px";
 }
 
+// provisional results note
+{ const pv=RESULTS.filter(r=>r.provisional); if(pv.length){ const n=$("provnote"); n.hidden=false;
+  n.textContent="Provisional: "+pv.map(r=>(r.ga>r.gb?r.a:r.b)+" leads "+(r.ga>r.gb?r.b:r.a)+" "+Math.max(r.ga,r.gb)+"–"+Math.min(r.ga,r.gb)).join("; ")+". Counts as a win as it stands; final if not completed by the deadline."; } }
 // meta
 const total = PLAYERS.length*(PLAYERS.length-1)/2;
 $("m-players").textContent = PLAYERS.length;
@@ -336,8 +343,10 @@ function matchEl(a,b,r,showDate){
     sc.className="score"; sc.textContent=`${ga}–${gb}`;
     if(ga>gb) pa.classList.add("w"); else if(gb>ga) pb.classList.add("w");
   } else { sc.className="score pending"; sc.textContent="vs"; }
+  if(r && r.provisional){ sc.classList.add("provsc"); sc.title="Provisional result"; }
   d.append(pa,sc,pb);
-  if(showDate && r && r.date){ const m=document.createElement("span"); m.className="mdate"; m.textContent=fmtDate(r.date); d.append(m); }
+  if(showDate && r && r.provisional){ const m=document.createElement("span"); m.className="mdate"; m.innerHTML='<span class="prov">Provisional</span>'; d.append(m); }
+  else if(showDate && r && r.date){ const m=document.createElement("span"); m.className="mdate"; m.textContent=fmtDate(r.date); d.append(m); }
   return d;
 }
 
