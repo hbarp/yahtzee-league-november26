@@ -46,6 +46,11 @@ tr.q td{background:#fff1b8!important}
 tr.q td.pos{box-shadow:inset 6px 0 0 #d4a017!important;color:#7a5a00!important}
 .qb{display:inline-block;margin-left:8px;background:#d4a017;color:#1e1e1e;font-weight:700;font-size:.68rem;letter-spacing:.06em;padding:2px 6px;border-radius:3px;vertical-align:1px}
 .key .qk{display:inline-flex;align-items:center;gap:6px}
+tr.out td{background:#ecebe7!important;color:#8a8a86!important}
+tr.out td .pbtn{color:#8a8a86}
+tr.out .form i{opacity:.5}
+.ob{display:inline-block;margin-left:8px;background:#9a9a96;color:#fff;font-weight:700;font-size:.66rem;letter-spacing:.08em;padding:2px 6px;border-radius:3px;vertical-align:1px;text-transform:uppercase}
+.key .qk.ok b{background:#9a9a96;color:#fff;font-size:.66rem;padding:2px 6px;border-radius:3px;letter-spacing:.08em}
 .key .qk b{background:#d4a017;color:#1e1e1e;font-size:.68rem;padding:2px 6px;border-radius:3px;letter-spacing:.06em}
 tr.po td.pts{background:#f4f8c8}
 tr.po td.pos{box-shadow:inset 5px 0 0 var(--po-edge)}
@@ -119,7 +124,7 @@ tr.detail>td{padding:0!important;text-align:left;white-space:normal;background:#
           <tbody id="standings"></tbody>
         </table>
       </div></div>
-      <div class="key"><span><i></i>Playoff places (top 8)</span><span class="qk"><b>Q</b>Mathematically qualified</span><span>Ties split by points difference, then games won</span><span class="tap-hint">Tap a name to see their results</span><span class="provnote" id="provnote" hidden></span></div>
+      <div class="key"><span><i></i>Playoff places (top 8)</span><span class="qk"><b>Q</b>Mathematically qualified</span><span class="qk ok"><b>OUT</b>Mathematically eliminated</span><span>Ties split by points difference, then games won</span><span class="tap-hint">Tap a name to see their results</span><span class="provnote" id="provnote" hidden></span></div>
     </section>
 
     <section aria-labelledby="rs-h">
@@ -138,6 +143,8 @@ const PLAYERS = ["big prabh","Dan","Jaan","Living in a cardboard box (Jörg)","C
 /* each result: {a, b, ga, gb, date}  ga = games won by a, gb = games won by b */
 /* players who are mathematically certain of a top-8 finish */
 const QUALIFIED = ["big prabh"];
+/* players who can no longer finish in the top 8 */
+const ELIMINATED = ["Emilia"];
 /* each result: {a, b, ga, gb, date}; provisional:true = awarded pending completion, counts as it stands */
 const RESULTS = [
   {a:"big prabh", b:"One Above All (Gilnash)", ga:2, gb:0, date:"2026-11-04"},
@@ -283,13 +290,14 @@ $("standings").innerHTML = rows.map((s,i)=>{
   const sig=[s.Pts,s.GW-s.GL,s.GW].join("|"); if(sig!==prev){pos=i+1;prev=sig;}
   const pd=s.GW-s.GL, form=s.form.slice(-5);
   const chips = form.length? form.map(f=>`<i class="f-${f}">${f}</i>`).join("") : `<i class="f-none">–</i>`;
-  return `<tr class="${pos===1&&s.P?'top':''} ${i<8?'po':''} ${QUALIFIED.includes(s.p)?'q':''} ${i===7&&rows.length>8?'cut':''}"><td class="pos">${pos}</td><td class="l name"></td><td>${s.P}</td><td>${s.W}</td><td>${s.L}</td><td>${s.GW}</td><td>${s.GL}</td><td class="${pd>0?'pd-pos':pd<0?'pd-neg':''}">${pd>0?'+':''}${pd}</td><td class="pts">${s.Pts}</td><td><span class="form">${chips}</span></td></tr>`;
+  return `<tr class="${pos===1&&s.P?'top':''} ${i<8?'po':''} ${QUALIFIED.includes(s.p)?'q':''} ${ELIMINATED.includes(s.p)?'out':''} ${i===7&&rows.length>8?'cut':''}"><td class="pos">${pos}</td><td class="l name"></td><td>${s.P}</td><td>${s.W}</td><td>${s.L}</td><td>${s.GW}</td><td>${s.GL}</td><td class="${pd>0?'pd-pos':pd<0?'pd-neg':''}">${pd>0?'+':''}${pd}</td><td class="pts">${s.Pts}</td><td><span class="form">${chips}</span></td></tr>`;
 }).join("");
 [...$("standings").querySelectorAll("td.name")].forEach((td,i)=>{
   const btn=document.createElement("button"); btn.type="button"; btn.className="pbtn"; btn.id="pb-"+i;
   btn.textContent=rows[i].p; btn.setAttribute("aria-expanded","false");
   btn.addEventListener("click",()=>togglePlayer(btn,rows[i].p)); td.append(btn);
   if(QUALIFIED.includes(rows[i].p)){ const q=document.createElement("span"); q.className="qb"; q.textContent="Q"; q.title="Qualified for the playoffs"; td.append(q); }
+  if(ELIMINATED.includes(rows[i].p)){ const o=document.createElement("span"); o.className="ob"; o.textContent="Out"; o.title="Can no longer reach the playoffs"; td.append(o); }
 });
 
 // player detail: their results and who they still have to play
