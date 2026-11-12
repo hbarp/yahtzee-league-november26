@@ -502,7 +502,7 @@ groupTables.forEach(({g,order,fixtures,played})=>{
   card.innerHTML=`<h3>${g.name}<small>${g.seeds} · ${played}/6 played</small></h3>`;
   const fr=document.createElement("div"); fr.className="frame"; const sc=document.createElement("div");
   sc.innerHTML=`<table><thead><tr><th>#</th><th class="l">Player</th><th>P</th><th>W</th><th>L</th><th>Games</th><th>PD</th><th class="pts">Pts</th></tr></thead><tbody>${
-    order.map((s,i)=>{const pd=s.GW-s.GL;return `<tr class="${i<2?'adv':''} ${i===1?'s8cut':''}"><td class="pos">${i+1}</td><td class="l name"><span class="seed">#${SEED[s.p]}</span>${s.p}</td><td>${s.P}</td><td>${s.W}</td><td>${s.L}</td><td>${s.GW}–${s.GL}</td><td class="${pd>0?'pd-pos':pd<0?'pd-neg':''}">${pd>0?'+':''}${pd}</td><td class="pts">${s.Pts}</td></tr>`}).join("")
+    order.map((s,i)=>{const pd=s.GW-s.GL;return `<tr class="${i<2?'adv':''} ${i===1?'s8cut':''}"><td class="pos">${i+1}</td><td class="l name">${s.p}</td><td>${s.P}</td><td>${s.W}</td><td>${s.L}</td><td>${s.GW}–${s.GL}</td><td class="${pd>0?'pd-pos':pd<0?'pd-neg':''}">${pd>0?'+':''}${pd}</td><td class="pts">${s.Pts}</td></tr>`}).join("")
   }</tbody></table>`;
   fr.append(sc); card.append(fr);
   const fh=document.createElement("p"); fh.className="fx-h"; fh.textContent="Matches"; card.append(fh);
