@@ -138,13 +138,13 @@ tr.detail>td{padding:0!important;text-align:left;white-space:normal;background:#
 
 <script>
 /* ===== TOURNAMENT DATA — edited by Claude on each update ===== */
-const TOURNAMENT = { name: "1v1 League", updated: "2026-11-11" };
+const TOURNAMENT = { name: "1v1 League", updated: "2026-11-12" };
 const PLAYERS = ["big prabh","Dan","Jaan","Living in a cardboard box (Jörg)","Californication","seim","One Above All (Gilnash)","SHEEP","Best Yathzee player (hohoho)","Nea","hunter50756","Nikodem","NLM (Armani)","Emilia","Arrow","dragon.exe","sinanamk","Mozi"];
 /* each result: {a, b, ga, gb, date}  ga = games won by a, gb = games won by b */
 /* players who are mathematically certain of a top-8 finish */
-const QUALIFIED = ["big prabh","Arrow","sinanamk"];
+const QUALIFIED = ["big prabh","Arrow","sinanamk","seim","Best Yathzee player (hohoho)","Mozi","Jaan"];
 /* players who can no longer finish in the top 8 */
-const ELIMINATED = ["Emilia"];
+const ELIMINATED = ["Dan","Californication","SHEEP","Nea","hunter50756","Nikodem","NLM (Armani)","Emilia","dragon.exe"];
 /* each result: {a, b, ga, gb, date}; provisional:true = awarded pending completion, counts as it stands */
 const RESULTS = [
   {a:"big prabh", b:"One Above All (Gilnash)", ga:2, gb:0, date:"2026-11-04"},
@@ -279,6 +279,20 @@ const RESULTS = [
   {a:"hunter50756", b:"dragon.exe", ga:2, gb:0, date:"2026-11-11"},
   {a:"Nikodem", b:"Arrow", ga:2, gb:0, date:"2026-11-11"},
   {a:"sinanamk", b:"Arrow", ga:2, gb:1, date:"2026-11-11"},
+  {a:"Mozi", b:"hunter50756", ga:2, gb:1, date:"2026-11-11"},
+  {a:"Mozi", b:"dragon.exe", ga:2, gb:1, date:"2026-11-12"},
+  {a:"seim", b:"Mozi", ga:2, gb:0, date:"2026-11-12"},
+  {a:"Nikodem", b:"seim", ga:2, gb:1, date:"2026-11-12"},
+  {a:"seim", b:"Emilia", ga:2, gb:1, date:"2026-11-12"},
+  {a:"seim", b:"hunter50756", ga:2, gb:0, date:"2026-11-12"},
+  {a:"seim", b:"Best Yathzee player (hohoho)", ga:2, gb:0, date:"2026-11-12"},
+  {a:"sinanamk", b:"Mozi", ga:2, gb:1, date:"2026-11-12"},
+  {a:"Best Yathzee player (hohoho)", b:"Nikodem", ga:2, gb:1, date:"2026-11-12"},
+  {a:"seim", b:"dragon.exe", ga:2, gb:1, date:"2026-11-12"},
+  {a:"Mozi", b:"SHEEP", ga:2, gb:1, date:"2026-11-12"},
+  {a:"Best Yathzee player (hohoho)", b:"Mozi", ga:2, gb:0, date:"2026-11-12"},
+  {a:"NLM (Armani)", b:"Best Yathzee player (hohoho)", ga:2, gb:0, date:"2026-11-12"},
+  {a:"NLM (Armani)", b:"Nikodem", ga:2, gb:0, date:"2026-11-12"},
 ];
 /* ============================================================== */
 
