@@ -101,7 +101,19 @@ tr.detail>td{padding:0!important;text-align:left;white-space:normal;background:#
 /* ===== Super 8 ===== */
 .stage-tag{display:inline-block;font-family:var(--f-body);font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--orange);color:#1e1e1e;border-radius:3px;padding:2px 8px;vertical-align:5px;margin-left:8px}
 .stage-tag.done{background:#9a9a96;color:#fff}
-.s8grid{display:grid;grid-template-columns:repeat(2,minmax(min-content,1fr));gap:18px}
+.s8grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px;row-gap:10px;min-width:960px}
+.s8grid .gcard{grid-row:span 4;display:grid;grid-template-rows:subgrid;gap:10px}
+.s8grid .frame{box-sizing:border-box;height:100%}
+.s8grid table{height:100%}
+.s8grid th,.s8grid td{padding:8px 2px}
+.s8grid td.name{padding-left:8px;padding-right:8px}
+.s8grid .seed{min-width:22px}
+.s8grid table{table-layout:fixed}
+.s8grid th:nth-child(1){width:24px}.s8grid th:nth-child(3),.s8grid th:nth-child(4),.s8grid th:nth-child(5){width:20px}
+.s8grid th:nth-child(6){width:46px}.s8grid th:nth-child(7),.s8grid th:nth-child(8){width:32px}
+.s8grid td{font-size:.9rem}.s8grid td.pts{font-size:1rem}.s8grid th{font-size:.78rem}
+.s8grid .match{align-content:center}
+.s8grid .list{height:100%;box-sizing:border-box;grid-auto-rows:1fr}
 .gcard{display:grid;gap:10px;align-content:start}
 .gcard h3{font-family:var(--f-logo);font-weight:400;font-size:1.25rem;letter-spacing:.03em;margin:0;color:var(--orange)}
 .gcard h3 small{font-family:var(--f-body);font-size:.78rem;color:var(--cream);opacity:.8;letter-spacing:0;margin-left:6px}
